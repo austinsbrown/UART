@@ -66,7 +66,7 @@ module UART_rx
 
                 default:
                 begin
-                    state <= startState;
+                    state <= startState;                                // reset 
                 end
             endcase
         end
