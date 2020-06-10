@@ -14,12 +14,13 @@ module UART_tx
     reg [1:0] stopState  = 3;                                   // send stop bit
 
     reg [7:0] data;                                             // holds data to send 
-    reg [2:0] bitPosition                                       // index for data reg
+    reg [2:0] bitPosition;                                      // index for data reg
 
     always @(posedge clk)
     begin
         case(state)
             idle:
+            begin
                 if(enable)                                      // if enable bit is high
                 begin
                     state       <= state;                       // go to next state
@@ -30,8 +31,36 @@ module UART_tx
 
             startState:
             begin
-                
+                if(clkEn)
+                begin
+                    serialOutput <= 0;                          // send the start bit
+                    state        <= dataState;                  // transition to data state
+                end
+            end
+
+            dataState:
+            begin
+                if(bitPosition == 7)                            // if all data has transmitted
+                begin
+                    state <= stopState;                         // transition to stop state
+                end
+                else
+                begin
+                    bitPosition  <= bitPosition+1;              // increment indexer
+                    serialOutput <= data[bitPosition];          // send data bit
+                end
+            end
+
+            default:
+            begin
+                state        <= idle;                           // tranition to idle
+                serialOutput <= 1;                              // send idle bit
             end
         endcase
+
+        if(state != idle)                                       // check to see if uart module is busy
+            busy <= 1;
+        else
+            busy <= 0;
     end
 endmodule
