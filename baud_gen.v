@@ -25,7 +25,7 @@ module baud_gen
         if(rxCount == txFinal)                          // if the count value is reached...
         begin
             rxClkEn <= ~rxClkEn;                        // invert output clock signal
-            rxClkEn <= 0;                               // reset counter
+            rxCount <= 0;                               // reset counter
         end
         else
         begin
@@ -38,7 +38,7 @@ module baud_gen
         if(txCount == txFinal)
         begin
             txClkEn <= ~txClkEn;
-            txClkEn <= 0;
+            txCount <= 0;
         end
         else
         begin

@@ -23,7 +23,7 @@ module UART_tx
             begin
                 if(enable)                                      // if enable bit is high
                 begin
-                    state       <= state;                       // go to next state
+                    state       <= startState;                  // go to next state
                     data        <= inputData;                   // transfer input data to data reg
                     bitPosition <= 0;                           // clear data index
                 end
